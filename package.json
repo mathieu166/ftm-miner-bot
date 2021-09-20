@@ -1,0 +1,23 @@
+{
+  "name": "ftm-miner-bot",
+  "version": "1.0.0",
+  "description": "A FTM Miner Bot",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mathieu166/ftm-miner-bot"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "node-cron": "^3.0.0",
+    "web3": "^1.5.2"
+  }
+}
