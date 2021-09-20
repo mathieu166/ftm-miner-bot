@@ -45,5 +45,5 @@ const executor = async () =>{const estimatedGas = await contract.methods.hatchEg
 
       console.log(`Successful - ${d.toLocaleString()} - More Miners hired on block ${result.blockNumber}.`)
   }
-  cron.schedule(`*${args.length==1?'\\'+args[0]:'\\30'} * * * *`, executor)
+  cron.schedule(`*${args.length==1?'/'+args[0]:'/30'} * * * *`, executor)
   executor()
