@@ -30,20 +30,40 @@ const account = web3.eth.accounts.wallet[0].address
 const contract = new web3.eth.Contract(abi, '0x69e7D335E8Da617E692d7379e03FEf74ef295899')
 
 console.log('Starting Bot...')
-console.log(`Will buy miners every ${args.length==1?args[0]:'30'} minutes`)
-const executor = async () =>{const estimatedGas = await contract.methods.hatchEggs(WALLET_ADDRESS)
-        .estimateGas(
-          {
-            from: WALLET_ADDRESS,
-            gasPrice: web3.utils.toWei('500', 'gwei')
-          })
-      let result = await contract.methods.hatchEggs(WALLET_ADDRESS).send({ from: account, gasPrice: web3.utils.toWei('250', 'gwei') , gas: estimatedGas });
-      const block = await web3.eth.getBlock(result.blockNumber)
+console.log(`Will buy miners every ${args.length == 1 ? args[0] : '30'} minutes`)
 
-      var d = new Date(0) // The 0 there is the key, which sets the date to the epoch
-      d.setUTCSeconds(block.timestamp)
+var counter = 0
+const executor = async () => {
 
-      console.log(`Successful - ${d.toLocaleString()} - More Miners hired on block ${result.blockNumber}.`)
+  if (counter++ % 2 != 0) {
+    const estimatedGas = await contract.methods.hatchEggs(WALLET_ADDRESS)
+      .estimateGas(
+        {
+          from: WALLET_ADDRESS,
+          gasPrice: web3.utils.toWei('500', 'gwei')
+        })
+    let result = await contract.methods.hatchEggs(WALLET_ADDRESS).send({ from: account, gasPrice: web3.utils.toWei('250', 'gwei'), gas: estimatedGas });
+    const block = await web3.eth.getBlock(result.blockNumber)
+
+    var d = new Date(0) // The 0 there is the key, which sets the date to the epoch
+    d.setUTCSeconds(block.timestamp)
+
+    console.log(`Successful - ${d.toLocaleString()} - More Miners hired on block ${result.blockNumber}.`)
+  }else{
+    const estimatedGas = await contract.methods.sellEggs()
+      .estimateGas(
+        {
+          from: WALLET_ADDRESS,
+          gasPrice: web3.utils.toWei('500', 'gwei')
+        })
+    let result = await contract.methods.sellEggs().send({ from: account, gasPrice: web3.utils.toWei('250', 'gwei'), gas: estimatedGas });
+    const block = await web3.eth.getBlock(result.blockNumber)
+
+    var d = new Date(0) // The 0 there is the key, which sets the date to the epoch
+    d.setUTCSeconds(block.timestamp)
+
+    console.log(`Successful - ${d.toLocaleString()} - Sold on block ${result.blockNumber}.`)
   }
-  cron.schedule(`*${args.length==1?'/'+args[0]:'/30'} * * * *`, executor)
-  executor()
+}
+cron.schedule(`*${args.length == 1 ? '/' + args[0] : '/30'} * * * *`, executor)
+executor()
